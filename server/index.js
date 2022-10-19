@@ -8,6 +8,7 @@ const morgan = require('morgan');
 
 //	routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 
 //	db
 const connectDB = async () => {
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', userRoutes);
 
 //	error handler
 app.use((err, req, res, next) => {

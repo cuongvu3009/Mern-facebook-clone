@@ -1,54 +1,59 @@
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
 const createError = require('../utils/error');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const register = async (req, res, next) => {
+  const { username, email, password } = req.body;
+
   try {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    //	check if user typed
+    if (!username || !email || !password) {
+      return next(
+        createError(404, 'Please provide username, email and password')
+      );
+    }
 
-    const newUser = new User({
-      ...req.body,
-      password: hash,
-    });
+    //	hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    await newUser.save();
-    res.status(200).send('User has been created.');
-  } catch (err) {
-    next(err);
+    const user = await User.create({ ...req.body, password: hashedPassword });
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
   }
 };
 
 const login = async (req, res, next) => {
   try {
-    //	check if user exist
+    //check if user exist
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return next(createError(404, 'User not found!'));
+    if (!user) {
+      return next(createError(404, 'User not found!'));
+    }
 
-    //	check if password correct
+    //check password correct
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,
       user.password
     );
-    if (!isPasswordCorrect)
-      return next(createError(400, 'Wrong password or username!'));
 
-    //	provide token
-    const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
-      process.env.JWT
-    );
+    if (!isPasswordCorrect) {
+      return next(createError(400, 'Wrong credential, try again!'));
+    }
 
-    const { password, isAdmin, ...otherDetails } = user._doc;
+    //create token
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    const { password, ...other } = user._doc;
     res
       .cookie('access_token', token, {
         httpOnly: true,
       })
-      .status(200)
-      .json({ details: { ...otherDetails }, isAdmin });
-  } catch (err) {
-    next(err);
+      .status(201)
+      .json(other);
+  } catch (error) {
+    next(error);
   }
 };
 
