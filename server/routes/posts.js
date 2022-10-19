@@ -10,7 +10,7 @@ const {
   search,
   getAllPosts,
 } = require('../controllers/post');
-const { verifyToken } = require('../utils/verifyToken');
+const { verifyToken, verifyAdmin } = require('../utils/verifyToken');
 
 //create a post
 router.post('/', verifyToken, addPost);
@@ -22,24 +22,18 @@ router.put('/:id', verifyToken, updatePost);
 router.delete('/:id', verifyToken, deletePost);
 
 //get post
-router.get('/find/:id', getVideo);
-
-//add view
-router.put('/view/:id', addView);
-
-//get trend
-router.get('/trend', trend);
-
-//get random
-router.get('/random', random);
+router.get('/find/:id', getPost);
 
 //create a post, need token
 router.get('/sub', verifyToken, sub);
 
-//get by tag
-router.get('/tags', getByTag);
+//get all posts
+router.get('/', getAllPosts);
 
 //get by search
 router.get('/search', search);
+
+//get by tags
+router.get('/tags', getByTag);
 
 module.exports = router;

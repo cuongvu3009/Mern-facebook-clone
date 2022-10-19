@@ -1,9 +1,9 @@
-const createError = require('../error');
+const createError = require('../utils/error');
 const Post = require('../models/Post');
 const User = require('../models/User');
 
 const addPost = async (req, res, next) => {
-  const newPost = new Video({ userId: req.user.id, ...req.body });
+  const newPost = new Post({ userId: req.user.id, ...req.body });
 
   try {
     const savedPost = await newPost.save();
@@ -19,7 +19,8 @@ const updatePost = async (req, res, next) => {
     if (!post) {
       return next(createError(404, `No post with ${req.params.id} found!`));
     }
-    if (req.user.id === Post.userId) {
+
+    if (req.user.id === post.userId) {
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },

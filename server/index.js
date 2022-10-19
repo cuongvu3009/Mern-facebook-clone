@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 //	routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const postRoutes = require('./routes/posts');
 const testRoutes = require('./routes/test');
 
 //	db
@@ -37,6 +38,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/test', testRoutes);
+app.use('/api/v1/posts', postRoutes);
 
 //	error handler
 app.use((err, req, res, next) => {
