@@ -30,10 +30,10 @@ router.put('/sub/:id', verifyToken, subscribe);
 //unsubscribe a user
 router.put('/unsub/:id', verifyToken, unsubscribe);
 
-//like a video
+//like a post
 router.put('/like/:postId', verifyToken, like);
 
-//dislike a video
+//dislike a post
 router.put('/dislike/:postId', verifyToken, dislike);
 
 module.exports = router;
