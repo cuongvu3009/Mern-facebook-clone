@@ -6,6 +6,9 @@ const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 
+//	routes
+const authRoutes = require('./routes/auth');
+
 //	db
 const connectDB = async () => {
   try {
@@ -27,6 +30,7 @@ app.use(morgan('tiny'));
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
+app.use('/api/v1/auth', authRoutes);
 
 //	error handler
 app.use((err, req, res, next) => {
