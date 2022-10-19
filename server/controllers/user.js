@@ -19,20 +19,20 @@ const update = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {
-      const deletedUser = await User.findByIdAndDelete(id);
-      res.status(200).json(deletedUser);
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json('User has been deleted!');
     } else {
-      res.send('You can only delete your account');
+      res.json('You can only delete your account');
     }
   } catch (error) {
     next(error);
   }
 };
 
-const getUser = async (req, res) => {
+const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
     res.status(200).json(user);
@@ -41,33 +41,41 @@ const getUser = async (req, res) => {
   }
 };
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select('-password');
     res.status(200).json(users);
   } catch (error) {
     next(error);
   }
 };
 
-const subscribe = async (req, res) => {
-  await User.findByIdAndUpdate(req.user.id, {
-    $push: { subscribedUsers: req.params.id },
-  });
-  await User.findByIdAndUpdate(req.params.id, {
-    $push: { subscribers: req.user.id },
-  });
-
-  res.status(200).json('Subcribed!');
-};
-
-const unsubscribe = async (req, res) => {
+const subscribe = async (req, res, next) => {
   try {
+    if (req.params.id == req.user.id)
+      return next(401, 'You cannot subscribe yourself');
+
     await User.findByIdAndUpdate(req.user.id, {
-      $pull: { subscribedUsers: req.params.id },
+      //	use addToSet instead of push to prevent duplicate values
+      $addToSet: { followings: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
-      $pull: { subscribers: req.user.id },
+      $addToSet: { followers: req.user.id },
+    });
+
+    res.status(200).json('Subcribed!');
+  } catch (error) {
+    next(error);
+  }
+};
+
+const unsubscribe = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { followings: req.params.id },
+    });
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { followers: req.user.id },
     });
 
     res.status(200).json('Unsubcribed!');
@@ -76,7 +84,7 @@ const unsubscribe = async (req, res) => {
   }
 };
 
-const like = async (req, res) => {
+const like = async (req, res, next) => {
   const userId = await req.user.id;
   const postId = await req.params.postId;
 
@@ -91,7 +99,7 @@ const like = async (req, res) => {
   }
 };
 
-const dislike = async (req, res) => {
+const dislike = async (req, res, next) => {
   const userId = await req.user.id;
   const postId = await req.params.postId;
 

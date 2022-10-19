@@ -38,7 +38,6 @@ const login = async (req, res, next) => {
       req.body.password,
       user.password
     );
-
     if (!isPasswordCorrect) {
       return next(createError(400, 'Wrong credential, try again!'));
     }

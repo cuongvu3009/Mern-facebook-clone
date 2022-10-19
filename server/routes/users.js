@@ -10,7 +10,7 @@ const {
   dislike,
   getAllUsers,
 } = require('../controllers/user');
-const verifyToken = require('../utils/verifyToken');
+const { verifyToken } = require('../utils/verifyToken');
 
 //get all users
 router.get('/', getAllUsers);
