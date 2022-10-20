@@ -6,7 +6,7 @@ const {
   addPost,
   updatePost,
   deletePost,
-  sub,
+  getSubPosts,
   search,
   getAllPosts,
 } = require('../controllers/post');
@@ -25,7 +25,7 @@ router.delete('/:id', verifyToken, deletePost);
 router.get('/find/:id', getPost);
 
 //create a post, need token
-router.get('/sub', verifyToken, sub);
+router.get('/sub', verifyToken, getSubPosts);
 
 //get all posts
 router.get('/', getAllPosts);
