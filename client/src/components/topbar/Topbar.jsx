@@ -27,10 +27,6 @@ export default function Topbar() {
         </div>
       </div>
       <div className='topbarRight'>
-        <div className='topbarLinks'>
-          <span className='topbarLink'>Homepage</span>
-          <span className='topbarLink'>Timeline</span>
-        </div>
         <div className='topbarIcons'>
           <div className='topbarIconItem'>
             <BsFillPersonFill />
@@ -45,12 +41,18 @@ export default function Topbar() {
             <span className='topbarIconBadge'>1</span>
           </div>
         </div>
+
         <Link className='styledLink' to={`/${currentUser._id}`}>
-          <img
-            src={currentUser.profilePicture}
-            alt={currentUser.profilePicture}
-            className='topbarImg'
-          />
+          <div className='topbarLinks'>
+            <span className='topbarLink'>Hi, {currentUser.username}</span>
+            <span className='topbarLink'>
+              <img
+                src={currentUser.profilePicture}
+                alt={currentUser.profilePicture}
+                className='topbarImg'
+              />
+            </span>
+          </div>
         </Link>
       </div>
     </div>
