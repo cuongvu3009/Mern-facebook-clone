@@ -2,7 +2,7 @@ import './post.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { format } from 'timeago.js';
+import Comment from '../comment/Comment';
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like);
@@ -34,7 +34,7 @@ export default function Post({ post }) {
             <span className='postUsername'>{username}</span>
           </div>
           <div className='postTopRight'>
-            <span className='postDate'>{format(post.createdAt)}</span>
+            <span className='postDate'>{Date(post.createdAt)}</span>
           </div>
         </div>
         <div className='postCenter'>
@@ -69,6 +69,8 @@ export default function Post({ post }) {
             <span className='postCommentText'>0 comments</span>
           </div>
         </div>
+
+        <Comment />
       </div>
     </div>
   );
