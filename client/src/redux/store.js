@@ -12,6 +12,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { postSlice } from './postSlice';
 
 const persistConfig = {
   key: 'root',
@@ -19,7 +20,7 @@ const persistConfig = {
   storage,
 };
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({ user: userReducer, post: postSlice });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

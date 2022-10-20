@@ -6,8 +6,7 @@ const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-// const cors = require('cors');
-// const proxy = require('http-proxy-middleware');
+const cors = require('cors');
 
 //	routes
 const authRoutes = require('./routes/auth');
@@ -32,6 +31,7 @@ mongoose.connection.on('disconnected', () => {
 app.use(morgan('tiny'));
 app.use(cookieParser());
 app.use(express.json());
+app.use(cors());
 
 //	routes
 app.get('/', (req, res) => {

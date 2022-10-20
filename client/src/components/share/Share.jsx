@@ -12,10 +12,11 @@ import axios from 'axios';
 
 export default function Share() {
   const [img, setImg] = useState('');
-  const [imgSrc, setImgSrc] = useState(undefined);
   const [desc, setDesc] = useState('');
+  const [imgSrc, setImgSrc] = useState(undefined);
   const [tags, setTags] = useState([]);
   const [imgPerc, setImgPerc] = useState(0);
+  const [isSent, setIsSent] = useState(false);
 
   const handleTags = (e) => {
     e.preventDefault();
@@ -68,10 +69,16 @@ export default function Share() {
     imgSrc && uploadFile(imgSrc);
   }, [imgSrc]);
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    const res = await axios.post('/posts', { img, desc, tags });
-    console.log(res.data);
+  const handleUpload = async () => {
+    setIsSent(false);
+    try {
+      await axios.post('/posts', { img, desc, tags });
+      setImg('');
+      setDesc('');
+      setTags([]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -83,7 +90,7 @@ export default function Share() {
             placeholder="What's in your mind Safak?"
             className='shareInput'
             onChange={(e) => setDesc(e.target.value)}
-          />
+          ></input>
         </div>
 
         <hr className='shareHr' />
@@ -97,8 +104,8 @@ export default function Share() {
                 accept='image/*'
                 //	1.start from here, get img from local
                 onChange={(e) => setImgSrc(e.target.files[0])}
-              />
-              {imgPerc} %
+              ></input>
+              {imgPerc}%
             </div>
 
             <div className='shareOption'>
@@ -107,7 +114,7 @@ export default function Share() {
                 type='text'
                 placeholder='Input a tags with commas.'
                 onChange={handleTags}
-              />
+              ></input>
             </div>
           </div>
 
