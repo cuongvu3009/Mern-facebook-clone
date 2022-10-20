@@ -1,10 +1,8 @@
 import './post.css';
-
-import { FiMoreVertical } from 'react-icons/fi';
-import { Users } from '../../dummyData';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { format } from 'timeago.js';
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like);
@@ -34,10 +32,9 @@ export default function Post({ post }) {
           <div className='postTopLeft'>
             <img className='postProfileImg' src={userImg} alt='' />
             <span className='postUsername'>{username}</span>
-            <span className='postDate'>{post.createdAt}</span>
           </div>
           <div className='postTopRight'>
-            <FiMoreVertical />
+            <span className='postDate'>{format(post.createdAt)}</span>
           </div>
         </div>
         <div className='postCenter'>
