@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
+import postSlice from './postSlice';
 
 import {
   persistStore,
@@ -12,7 +13,6 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { postSlice } from './postSlice';
 
 const persistConfig = {
   key: 'root',

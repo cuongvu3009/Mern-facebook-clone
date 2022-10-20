@@ -9,33 +9,40 @@ import axios from 'axios';
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like);
   const [isLiked, setIsLiked] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userImg, setUserImg] = useState('');
 
   const likeHandler = () => {
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get(`users/find/${post.userId}`);
+      console.log(res.data);
+      setUsername(res.data?.username);
+      setUserImg(res.data?.profilePicture);
+    };
+    getUser();
+  }, [post.userId]);
+
   return (
     <div className='post'>
       <div className='postWrapper'>
         <div className='postTop'>
           <div className='postTopLeft'>
-            {/* <img
-              className='postProfileImg'
-              src={Users.filter((u) => u.id === post?.userId)[0].profilePicture}
-              alt=''
-            /> */}
-            <span className='postUsername'>
-              {/* {Users.filter((u) => u.id === post?.userId)[0].username} */}
-            </span>
-            {/* <span className='postDate'>{post.createdAt}</span> */}
+            <img className='postProfileImg' src={userImg} alt='' />
+            <span className='postUsername'>{username}</span>
+            <span className='postDate'>{post.createdAt}</span>
           </div>
           <div className='postTopRight'>
             <FiMoreVertical />
           </div>
         </div>
         <div className='postCenter'>
-          {/* <span className='postText'>{post?.desc}</span>
-          <img className='postImg' src={post.img} alt={post.img} /> */}
+          <span className='postText'>{post?.desc}</span>
+          <img className='postImg' src={post.img} alt={post.img} />
         </div>
         <div className='postBottom'>
           <div className='postBottomLeft'>
@@ -51,7 +58,9 @@ export default function Post({ post }) {
               onClick={likeHandler}
               alt=''
             />
-            {/* <span className='postLikeCounter'>{post.likes} people like it</span> */}
+            <span className='postLikeCounter'>
+              {post.likes.length} people like it
+            </span>
           </div>
           <div className='postBottomRight'>
             <span className='postCommentText'>0 comments</span>
