@@ -1,11 +1,41 @@
 import { useState } from 'react';
 import './register.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post('/auth/register', {
+        username,
+        email,
+        password,
+      });
+      console.log(res.data);
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+      setSuccess(true);
+      setError(false);
+      setUsername('');
+      setEmail('');
+      setPassword('');
+    } catch (err) {
+      setError(true);
+      setSuccess(false);
+      console.log(err);
+    }
+  };
 
   return (
     <div className='login'>
@@ -37,13 +67,26 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button className='loginButton'>Sign Up</button>
+            <button className='loginButton' onClick={handleRegister}>
+              Sign Up
+            </button>
 
             <button className='loginRegisterButton'>
               <Link to='/login' className='styledLink'>
                 Log into Account
               </Link>
             </button>
+
+            {error && (
+              <p style={{ textAlign: 'center' }}>
+                There is an error, please try again!
+              </p>
+            )}
+            {success && (
+              <p style={{ textAlign: 'center' }}>
+                Register success, redirecting to login page...
+              </p>
+            )}
           </div>
         </div>
       </div>
