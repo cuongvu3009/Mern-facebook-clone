@@ -1,7 +1,7 @@
 import Post from '../post/Post';
 import Share from '../share/Share';
 import './feed.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFailure, fetchStart, fetchSuccess } from '../../redux/postSlice';

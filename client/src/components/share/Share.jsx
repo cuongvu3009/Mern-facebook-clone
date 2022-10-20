@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './share.css';
 import { MdPermMedia, MdLabel } from 'react-icons/md';
 import { projectStorage } from '../../firebase';
@@ -18,10 +18,7 @@ export default function Share() {
     setTags(e.target.value.split(','));
   };
 
-  // urlType gonna be used later if video upload needed
-  //	img as argument, and trigger upload file
   //	upload user profile picture
-
   const handleFileUpload = async (e) => {
     let selected = e.target.files[0];
 

@@ -26,12 +26,6 @@ export default function Register() {
       return;
     }
 
-    //	check if image
-    if (!selected.type.includes('image')) {
-      setProfilePictureErr('Selected file must be an image');
-      return;
-    }
-
     //	check image size
     if (selected.size > 10000000) {
       setProfilePictureErr('Image size must be less than 10mb');
@@ -45,7 +39,6 @@ export default function Register() {
     console.log(imgUrl);
     setProfilePictureErr(null);
     setProfilePicture(imgUrl);
-    console.log('thumbnail updated');
   };
 
   const handleRegister = async (e) => {
@@ -63,7 +56,7 @@ export default function Register() {
       res.data &&
         setTimeout(() => {
           navigate('/login');
-        }, 3000);
+        }, 2000);
       setSuccess(true);
       setError(false);
       setUsername('');
@@ -110,7 +103,8 @@ export default function Register() {
               <input
                 required
                 type='file'
-                onChange={(e) => handleFileUpload()}
+                accept='image/*'
+                onChange={handleFileUpload}
               />
             </label>
             {profilePictureErr && (
