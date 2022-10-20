@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './share.css';
 import { MdPermMedia, MdLabel } from 'react-icons/md';
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from 'firebase/storage';
-import { app } from '../../firebase';
+import { projectStorage } from '../../firebase';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export default function Share() {
-  const [img, setImg] = useState('');
   const [desc, setDesc] = useState('');
-  const [imgSrc, setImgSrc] = useState(undefined);
   const [tags, setTags] = useState([]);
-  const [imgPerc, setImgPerc] = useState(0);
-  const [isSent, setIsSent] = useState(false);
+  const [img, setImg] = useState('');
+  const [imgErr, setImgErr] = useState(null);
+
+  const { currentUser } = useSelector((state) => state.user);
 
   const handleTags = (e) => {
     e.preventDefault();
@@ -25,52 +20,40 @@ export default function Share() {
 
   // urlType gonna be used later if video upload needed
   //	img as argument, and trigger upload file
-  const uploadFile = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  //	upload user profile picture
 
-    uploadTask.on(
-      'state_changed',
+  const handleFileUpload = async (e) => {
+    let selected = e.target.files[0];
 
-      //	upload process percentage
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImgPerc(Math.round(progress));
-        switch (snapshot.state) {
-          case 'paused':
-            console.log('Upload is paused');
-            break;
-          case 'running':
-            console.log('Upload is running');
-            break;
-          default:
-            break;
-        }
-      },
+    //	check if selected or not
+    if (!selected) {
+      setImgErr('Please select a file');
+      return;
+    }
 
-      (error) => {
-        console.log(error);
-      },
+    //	check if image
+    if (!selected.type.includes('image')) {
+      setImgErr('Selected file must be an image');
+      return;
+    }
 
-      //	set img download link to post it to server
-      async () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImg(downloadURL);
-        });
-      }
-    );
+    //	check image size
+    if (selected.size > 10000000) {
+      setImgErr('Image size must be less than 10mb');
+      return;
+    }
+
+    const uploadPath = `posts/${currentUser.username}/${selected.name}`;
+    const img = await projectStorage.ref(uploadPath).put(selected);
+    const imgUrl = await img.ref.getDownloadURL();
+
+    console.log(imgUrl);
+    setImgErr(null);
+    setImg(imgUrl);
+    console.log('thumbnail upload!');
   };
 
-  //	2. trigger upload file if img from local exist
-  useEffect(() => {
-    imgSrc && uploadFile(imgSrc);
-  }, [imgSrc]);
-
   const handleUpload = async () => {
-    setIsSent(false);
     try {
       await axios.post('/posts', { img, desc, tags });
       setImg('');
@@ -85,12 +68,17 @@ export default function Share() {
     <div className='share'>
       <div className='shareWrapper'>
         <div className='shareTop'>
-          <img className='shareProfileImg' src='/assets/person/1.jpeg' alt='' />
+          <img
+            className='shareProfileImg'
+            src={currentUser.profilePicture}
+            alt={currentUser.profilePicture}
+          />
           <input
-            placeholder="What's in your mind Safak?"
+            placeholder="What's in your mind?"
             className='shareInput'
             onChange={(e) => setDesc(e.target.value)}
           ></input>
+          {imgErr && <div className='error'>{imgErr}</div>}
         </div>
 
         <hr className='shareHr' />
@@ -99,13 +87,8 @@ export default function Share() {
           <div className='shareOptions'>
             <div className='shareOption'>
               <MdPermMedia htmlColor='tomato' className='shareIcon' />
-              <input
-                type='file'
-                accept='image/*'
-                //	1.start from here, get img from local
-                onChange={(e) => setImgSrc(e.target.files[0])}
-              ></input>
-              {imgPerc}%
+
+              <input type='file' accept='image/*' onChange={handleFileUpload} />
             </div>
 
             <div className='shareOption'>

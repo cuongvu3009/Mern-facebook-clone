@@ -20,7 +20,7 @@ export default function Post({ post }) {
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`users/find/${post.userId}`);
-      console.log(res.data);
+
       setUsername(res.data?.username);
       setUserImg(res.data?.profilePicture);
     };

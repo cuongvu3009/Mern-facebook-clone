@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchFailure, fetchStart, fetchSuccess } from '../../redux/postSlice';
 
 export default function Feed() {
-  const [user, setUser] = useState({});
   const dispatch = useDispatch();
   const { currentPost } = useSelector((state) => state.post);
 
@@ -16,10 +15,7 @@ export default function Feed() {
       dispatch(fetchStart());
       try {
         const postRes = await axios.get('/posts');
-        // const userRes = await axios.get(`/users/find/${postRes.data.userId}`);
         dispatch(fetchSuccess(postRes.data));
-        // setUser(userRes);
-        // setUser(postRes.data.userId);
       } catch (error) {
         console.log(error);
         dispatch(fetchFailure());
