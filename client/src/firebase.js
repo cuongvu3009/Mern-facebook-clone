@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 //	Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 
 //	Initialize services
 const projectFirestore = firebase.firestore();
@@ -22,4 +22,4 @@ const projectStorage = firebase.storage();
 //	Timestamp
 const timestamp = firebase.firestore.Timestamp;
 
-export { projectFirestore, projectStorage, timestamp };
+export { projectFirestore, projectStorage, timestamp, app };

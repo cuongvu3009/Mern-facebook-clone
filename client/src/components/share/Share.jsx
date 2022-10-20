@@ -1,16 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './share.css';
-import { MdPermMedia, MdLabel, MdEmojiEmotions } from 'react-icons/md';
-import { ImLocation } from 'react-icons/im';
+import { MdPermMedia, MdLabel } from 'react-icons/md';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
+import { app } from '../../firebase';
+import axios from 'axios';
 
 export default function Share() {
+  const [img, setImg] = useState('');
+  const [imgSrc, setImgSrc] = useState(undefined);
   const [desc, setDesc] = useState('');
-  const [img, setImg] = useState(undefined);
   const [tags, setTags] = useState([]);
+  const [imgPerc, setImgPerc] = useState(0);
 
   const handleTags = (e) => {
     e.preventDefault();
     setTags(e.target.value.split(','));
+  };
+
+  // urlType gonna be used later if video upload needed
+  //	img as argument, and trigger upload file
+  const uploadFile = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+
+      //	upload process percentage
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImgPerc(Math.round(progress));
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+          default:
+            break;
+        }
+      },
+
+      (error) => {
+        console.log(error);
+      },
+
+      //	set img download link to post it to server
+      async () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImg(downloadURL);
+        });
+      }
+    );
+  };
+
+  //	2. trigger upload file if img from local exist
+  useEffect(() => {
+    imgSrc && uploadFile(imgSrc);
+  }, [imgSrc]);
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    const res = await axios.post('/posts', { img, desc, tags });
+    console.log(res.data);
   };
 
   return (
@@ -21,6 +82,7 @@ export default function Share() {
           <input
             placeholder="What's in your mind Safak?"
             className='shareInput'
+            onChange={(e) => setDesc(e.target.value)}
           />
         </div>
 
@@ -30,8 +92,15 @@ export default function Share() {
           <div className='shareOptions'>
             <div className='shareOption'>
               <MdPermMedia htmlColor='tomato' className='shareIcon' />
-              <span className='shareOptionText'>Photo or Video</span>
+              <input
+                type='file'
+                accept='image/*'
+                //	1.start from here, get img from local
+                onChange={(e) => setImgSrc(e.target.files[0])}
+              />
+              {imgPerc} %
             </div>
+
             <div className='shareOption'>
               <MdLabel htmlColor='blue' className='shareIcon' />
               <input
@@ -42,7 +111,9 @@ export default function Share() {
             </div>
           </div>
 
-          <button className='shareButton'>Share</button>
+          <button className='shareButton' onClick={handleUpload}>
+            Share
+          </button>
         </div>
       </div>
     </div>
