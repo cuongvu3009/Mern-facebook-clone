@@ -42,6 +42,12 @@ export default function Post({ post }) {
         </div>
         <div className='postCenter'>
           <span className='postText'>{post?.desc}</span>
+
+          <div>
+            {post?.tags.map((tag) => (
+              <span className='postTags'>#{tag} </span>
+            ))}
+          </div>
           <img className='postImg' src={post.img} alt={post.img} />
         </div>
         <div className='postBottom'>

@@ -77,3 +77,10 @@
   border-bottom: 1px dashed gray;
   font-size: 15px;
 }
+.postText {
+  font-size: 20px;
+}
+
+.postTags {
+  color: #999;
+}
