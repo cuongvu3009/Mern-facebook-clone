@@ -19,3 +19,8 @@ code {
   margin: 0;
   padding: 0;
 }
+
+.styledLink {
+  color: inherit;
+  text-decoration: none;
+}

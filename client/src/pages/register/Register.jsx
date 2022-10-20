@@ -1,6 +1,12 @@
+import { useState } from 'react';
 import './register.css';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <div className='login'>
       <div className='loginWrapper'>
@@ -12,12 +18,32 @@ export default function Register() {
         </div>
         <div className='loginRight'>
           <div className='loginBox'>
-            <input placeholder='Username' className='loginInput' />
-            <input placeholder='Email' className='loginInput' />
-            <input placeholder='Password' className='loginInput' />
-            <input placeholder='Password Again' className='loginInput' />
+            <input
+              placeholder='Username'
+              className='loginInput'
+              type='text'
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              placeholder='Email'
+              className='loginInput'
+              type='email'
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              placeholder='Password'
+              className='loginInput'
+              type='password'
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
             <button className='loginButton'>Sign Up</button>
-            <button className='loginRegisterButton'>Log into Account</button>
+
+            <button className='loginRegisterButton'>
+              <Link to='/login' className='styledLink'>
+                Log into Account
+              </Link>
+            </button>
           </div>
         </div>
       </div>
