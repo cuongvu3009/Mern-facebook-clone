@@ -84,7 +84,8 @@ export default function Register() {
             )}
             {success && (
               <p style={{ textAlign: 'center' }}>
-                Register success, redirecting to login page...
+                Register success, You can now login, redirecting to login
+                page...
               </p>
             )}
           </div>

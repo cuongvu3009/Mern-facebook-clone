@@ -1,8 +1,18 @@
+import React, { useState } from 'react';
 import './share.css';
 import { MdPermMedia, MdLabel, MdEmojiEmotions } from 'react-icons/md';
 import { ImLocation } from 'react-icons/im';
 
 export default function Share() {
+  const [desc, setDesc] = useState('');
+  const [img, setImg] = useState(undefined);
+  const [tags, setTags] = useState([]);
+
+  const handleTags = (e) => {
+    e.preventDefault();
+    setTags(e.target.value.split(','));
+  };
+
   return (
     <div className='share'>
       <div className='shareWrapper'>
@@ -13,7 +23,9 @@ export default function Share() {
             className='shareInput'
           />
         </div>
+
         <hr className='shareHr' />
+
         <div className='shareBottom'>
           <div className='shareOptions'>
             <div className='shareOption'>
@@ -22,17 +34,14 @@ export default function Share() {
             </div>
             <div className='shareOption'>
               <MdLabel htmlColor='blue' className='shareIcon' />
-              <span className='shareOptionText'>Tag</span>
-            </div>
-            <div className='shareOption'>
-              <ImLocation htmlColor='green' className='shareIcon' />
-              <span className='shareOptionText'>Location</span>
-            </div>
-            <div className='shareOption'>
-              <MdEmojiEmotions htmlColor='goldenrod' className='shareIcon' />
-              <span className='shareOptionText'>Feelings</span>
+              <input
+                type='text'
+                placeholder='Input a tags with commas.'
+                onChange={handleTags}
+              />
             </div>
           </div>
+
           <button className='shareButton'>Share</button>
         </div>
       </div>

@@ -50,8 +50,9 @@
 .shareOption {
   display: flex;
   align-items: center;
-  margin-right: 15px;
+  margin-right: 20px;
   cursor: pointer;
+  width: fit-content;
 }
 
 .shareIcon {
