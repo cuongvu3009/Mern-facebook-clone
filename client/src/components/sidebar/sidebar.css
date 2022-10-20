@@ -53,3 +53,13 @@
   margin: 0;
   list-style: none;
 }
+
+.logoutButton {
+  background-color: red;
+  color: #fff;
+  width: 150px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+}

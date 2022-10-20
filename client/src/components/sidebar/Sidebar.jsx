@@ -8,8 +8,21 @@ import {
   BsCalendarEventFill,
 } from 'react-icons/bs';
 import { HiUserGroup } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    setTimeout(() => {
+      navigate('/login');
+    }, 1000);
+  };
+
   return (
     <div className='sidebar'>
       <div className='sidebarWrapper'>
@@ -49,6 +62,9 @@ export default function Sidebar() {
         </ul>
         <button className='sidebarButton'>Show More</button>
         <hr className='sidebarHr' />
+        <button className='logoutButton' onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );
