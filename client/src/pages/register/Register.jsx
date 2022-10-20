@@ -3,6 +3,7 @@ import './register.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
+import { projectStorage } from '../../firebase';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -10,21 +11,59 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const [profilePicture, setProfilePicture] = useState('');
+  const [profilePictureErr, setProfilePictureErr] = useState(null);
   const navigate = useNavigate();
+
+  //	upload user profile picture
+  const handleFileUpload = async (e) => {
+    let selected = e.target.files[0];
+
+    //	check if selected or not
+    if (!selected) {
+      setProfilePictureErr('Please select a file');
+      return;
+    }
+
+    //	check if image
+    if (!selected.type.includes('image')) {
+      setProfilePictureErr('Selected file must be an image');
+      return;
+    }
+
+    //	check image size
+    if (selected.size > 10000000) {
+      setProfilePictureErr('Image size must be less than 10mb');
+      return;
+    }
+
+    const uploadPath = `profiles/${username}/${selected.name}`;
+    const img = await projectStorage.ref(uploadPath).put(selected);
+    const imgUrl = await img.ref.getDownloadURL();
+
+    console.log(imgUrl);
+    setProfilePictureErr(null);
+    setProfilePicture(imgUrl);
+    console.log('thumbnail updated');
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/auth/register', {
+      const res = await axios.post('/auth/register/', {
         username,
         email,
         password,
+        profilePicture,
       });
       console.log(res.data);
-      setTimeout(() => {
-        navigate('/login');
-      }, 3000);
+
+      res.data &&
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       setSuccess(true);
       setError(false);
       setUsername('');
@@ -66,7 +105,17 @@ export default function Register() {
               type='password'
               onChange={(e) => setPassword(e.target.value)}
             />
-
+            <label htmlFor=''>
+              Profile picture:
+              <input
+                required
+                type='file'
+                onChange={(e) => handleFileUpload()}
+              />
+            </label>
+            {profilePictureErr && (
+              <div className='error'>{profilePictureErr}</div>
+            )}
             <button className='loginButton' onClick={handleRegister}>
               Sign Up
             </button>
