@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import './comment.css';
-import { AiOutlineSend } from 'react-icons/ai';
 
 const Comment = () => {
   const { currentUser } = useSelector((state) => state.user);
