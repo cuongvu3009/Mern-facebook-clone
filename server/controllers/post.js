@@ -120,7 +120,9 @@ const getAllPosts = async (req, res, next) => {
 
 const getMyPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({ userId: req.user.id });
+    const posts = await Post.find({ userId: req.user.id }).sort({
+      createdAt: -1,
+    });
     res.status(200).json(posts);
   } catch (error) {
     next(error);
