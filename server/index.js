@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const testRoutes = require('./routes/test');
+const commentRoutes = require('./routes/comments');
 
 //	db
 const connectDB = async () => {
@@ -41,6 +42,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/test', testRoutes);
 app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/comments', commentRoutes);
 
 //	error handler
 app.use((err, req, res, next) => {

@@ -1,15 +1,18 @@
 .comment-wrapper {
-  margin: 20px 0;
+  border-top: 1px solid #999;
+  margin: 15px 0;
   width: 100%;
 }
 
 .comment-bar {
+  margin-top: 15px;
   display: flex;
   align-items: center;
   width: 100%;
 }
 
 #comment-box {
+  margin-left: 10px;
   width: 100%;
   padding: 10px;
 }
