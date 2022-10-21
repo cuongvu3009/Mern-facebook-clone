@@ -7,18 +7,18 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function Post({ post }) {
-  const [like, setLike] = useState(post.like);
-  const [isLiked, setIsLiked] = useState(false);
   const [username, setUsername] = useState('');
   const [userImg, setUserImg] = useState('');
   const [postComments, setPostComments] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-
   const [desc, setDesc] = useState('');
 
-  const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1);
-    setIsLiked(!isLiked);
+  const likeHandler = async () => {
+    try {
+      await axios.put(`/users/like/${post._id}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -43,15 +43,13 @@ export default function Post({ post }) {
   }, [post._id]);
 
   const handleAddCmt = (e) => {
-    e.preventDefault();
     try {
       const createComment = async () => {
-        const res = await axios.post(`/comments/`, {
+        return axios.post(`/comments/`, {
           userId: currentUser._id,
           postId: post._id,
           desc,
         });
-        console.log(res.data);
       };
       createComment();
     } catch (error) {
@@ -88,12 +86,6 @@ export default function Post({ post }) {
             <img
               className='likeIcon'
               src='assets/like.png'
-              onClick={likeHandler}
-              alt=''
-            />
-            <img
-              className='likeIcon'
-              src='assets/heart.png'
               onClick={likeHandler}
               alt=''
             />

@@ -1,20 +1,21 @@
 import Post from '../post/Post';
 import Share from '../share/Share';
 import './feed.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchFailure, fetchStart, fetchSuccess } from '../../redux/postSlice';
 
 export default function Feed() {
+  const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
-  const { currentPost } = useSelector((state) => state.post);
 
   useEffect(() => {
     const fetchPosts = async () => {
       dispatch(fetchStart());
       try {
         const postRes = await axios.get('/posts');
+        setPosts(postRes.data);
         dispatch(fetchSuccess(postRes.data));
       } catch (error) {
         console.log(error);
@@ -28,7 +29,7 @@ export default function Feed() {
     <div className='feed'>
       <div className='feedWrapper'>
         <Share />
-        {currentPost.map((post) => (
+        {posts.map((post) => (
           <Post key={post._id} post={post} />
         ))}
       </div>

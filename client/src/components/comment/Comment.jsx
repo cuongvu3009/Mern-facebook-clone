@@ -3,9 +3,11 @@ import './comment.css';
 import axios from 'axios';
 import './comment.css';
 import { AiFillDelete } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 
 const Comment = ({ comment, commentId }) => {
   const [user, setUser] = useState({});
+  const { currentUser } = useSelector((state) => state.user);
 
   const deleteComment = () => {
     try {
@@ -19,7 +21,7 @@ const Comment = ({ comment, commentId }) => {
     try {
       const getCommentUser = async () => {
         const res = await axios.get(`/users/find/${comment?.userId}`);
-        setUser(res.data);
+        await setUser(res.data);
       };
       getCommentUser();
     } catch (error) {
@@ -44,12 +46,14 @@ const Comment = ({ comment, commentId }) => {
               </span>
             </div>
           </div>
-          <button
-            className='delete-comment-btn'
-            onClick={() => deleteComment()}
-          >
-            <AiFillDelete size={20} />
-          </button>
+          {user._id === currentUser._id && (
+            <button
+              className='delete-comment-btn'
+              onClick={() => deleteComment()}
+            >
+              <AiFillDelete size={20} />
+            </button>
+          )}
         </div>
       </div>
     </>

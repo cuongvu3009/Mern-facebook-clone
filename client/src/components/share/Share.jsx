@@ -10,7 +10,7 @@ export default function Share() {
   const [tags, setTags] = useState([]);
   const [img, setImg] = useState('');
   const [imgErr, setImgErr] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   const handleTags = (e) => {
@@ -51,58 +51,70 @@ export default function Share() {
   };
 
   const handleUpload = async () => {
+    setIsLoading(true);
     try {
       await axios.post('/posts', { img, desc, tags });
-      setImg('');
-      setDesc('');
-      setTags([]);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className='share'>
-      <div className='shareWrapper'>
-        <div className='shareTop'>
-          <img
-            className='shareProfileImg'
-            src={currentUser.profilePicture}
-            alt={currentUser.profilePicture}
-          />
-          <input
-            placeholder="What's in your mind?"
-            className='shareInput'
-            onChange={(e) => setDesc(e.target.value)}
-          ></input>
-          {imgErr && <div className='error'>{imgErr}</div>}
-        </div>
-
-        <hr className='shareHr' />
-
-        <div className='shareBottom'>
-          <div className='shareOptions'>
-            <div className='shareOption'>
-              <MdPermMedia htmlColor='tomato' className='shareIcon' />
-
-              <input type='file' accept='image/*' onChange={handleFileUpload} />
+    <>
+      {isLoading ? (
+        'Loading'
+      ) : (
+        <div className='share'>
+          <div className='shareWrapper'>
+            <div className='shareTop'>
+              <img
+                className='shareProfileImg'
+                src={currentUser.profilePicture}
+                alt={currentUser.profilePicture}
+              />
+              <input
+                placeholder="What's in your mind?"
+                className='shareInput'
+                onChange={(e) => setDesc(e.target.value)}
+              ></input>
+              {imgErr && <div className='error'>{imgErr}</div>}
             </div>
 
-            <div className='shareOption'>
-              <MdLabel htmlColor='blue' className='shareIcon' />
-              <input
-                type='text'
-                placeholder='Input a tags with commas.'
-                onChange={handleTags}
-              ></input>
+            <hr className='shareHr' />
+
+            <div className='shareBottom'>
+              <div className='shareOptions'>
+                <div className='shareOption'>
+                  <MdPermMedia htmlColor='tomato' className='shareIcon' />
+
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={handleFileUpload}
+                  />
+                </div>
+
+                <div className='shareOption'>
+                  <MdLabel htmlColor='blue' className='shareIcon' />
+                  <input
+                    type='text'
+                    placeholder='Input a tags with commas.'
+                    onChange={handleTags}
+                  ></input>
+                </div>
+              </div>
+
+              <button className='shareButton' onClick={() => handleUpload()}>
+                Share
+              </button>
             </div>
           </div>
-
-          <button className='shareButton' onClick={handleUpload}>
-            Share
-          </button>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
