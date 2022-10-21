@@ -22,7 +22,7 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get(`users/find/${post.userId}`);
+      const res = await axios.get(`/users/find/${post.userId}`);
       setUsername(res.data?.username);
       setUserImg(res.data?.profilePicture);
     };
@@ -32,7 +32,7 @@ export default function Post({ post }) {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await axios.get(`comments/${post._id}`);
+        const res = await axios.get(`/comments/${post._id}`);
         setPostComments(res?.data);
       } catch (error) {
         console.log(error);
@@ -45,7 +45,7 @@ export default function Post({ post }) {
     e.preventDefault();
     try {
       const createComment = async () => {
-        const res = await axios.post(`comments/`, {
+        const res = await axios.post(`/comments/`, {
           userId: currentUser._id,
           postId: post._id,
           desc,
@@ -122,7 +122,11 @@ export default function Post({ post }) {
             </button>
           </div>
           {postComments.map((comment) => (
-            <Comment comment={comment} />
+            <Comment
+              comment={comment}
+              key={comment._id}
+              commentId={comment._id}
+            />
           ))}
         </div>
       </div>

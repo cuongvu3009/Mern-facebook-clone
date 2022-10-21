@@ -4,15 +4,22 @@ import axios from 'axios';
 import './comment.css';
 import { AiFillDelete } from 'react-icons/ai';
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, commentId }) => {
   const [user, setUser] = useState({});
+
+  const deleteComment = () => {
+    try {
+      axios.delete(`/comments/${comment._id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     try {
       const getCommentUser = async () => {
         const res = await axios.get(`/users/find/${comment?.userId}`);
         setUser(res.data);
-        console.log(res.data);
       };
       getCommentUser();
     } catch (error) {
@@ -37,7 +44,10 @@ const Comment = ({ comment }) => {
               </span>
             </div>
           </div>
-          <button className='delete-comment-btn'>
+          <button
+            className='delete-comment-btn'
+            onClick={() => deleteComment()}
+          >
             <AiFillDelete size={20} />
           </button>
         </div>
