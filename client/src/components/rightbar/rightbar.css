@@ -65,7 +65,7 @@
 .rightbarFollowings {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .rightbarFollowing {
@@ -81,4 +81,26 @@
   height: 100px;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.rightbarFollowingName {
+  text-align: center;
+}
+
+.friend-req {
+  background-color: #1b74e4;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.accept {
+  background-color: #1b74e4;
+  color: #fff;
+}
+
+.remove {
+  background-color: #e4e6eb;
+  color: #5f6062;
 }

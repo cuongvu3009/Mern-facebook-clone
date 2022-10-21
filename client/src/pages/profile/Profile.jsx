@@ -1,6 +1,5 @@
 import './profile.css';
 import Topbar from '../../components/topbar/Topbar';
-import Sidebar from '../../components/sidebar/Sidebar';
 import Rightbar from '../../components/rightbar/Rightbar';
 import ProfileFeed from '../../components/feed/ProfileFeed';
 
@@ -9,7 +8,6 @@ export default function Profile() {
     <>
       <Topbar />
       <div className='profile'>
-        <Sidebar />
         <div className='profileRight'>
           <div className='profileRightTop'>
             <div className='profileCover'>

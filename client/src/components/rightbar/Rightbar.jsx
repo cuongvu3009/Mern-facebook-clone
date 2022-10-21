@@ -26,6 +26,7 @@ export default function Rightbar({ profile }) {
   const ProfileRightbar = () => {
     return (
       <>
+        {/* user info */}
         <h4 className='rightbarTitle'>User information</h4>
         <div className='rightbarInfo'>
           <div className='rightbarInfoItem'>
@@ -42,6 +43,9 @@ export default function Rightbar({ profile }) {
           </div>
         </div>
 
+        <hr />
+
+        {/* user friend */}
         <h4 className='rightbarTitle'>User friends</h4>
         <div className='rightbarFollowings'>
           <div className='rightbarFollowing'>
@@ -52,45 +56,22 @@ export default function Rightbar({ profile }) {
             />
             <span className='rightbarFollowingName'>John Carter</span>
           </div>
+        </div>
+
+        <hr />
+
+        {/* Friend accept */}
+        <h4 className='rightbarTitle'>Friend requests</h4>
+        <div className='rightbarFollowings'>
           <div className='rightbarFollowing'>
             <img
-              src='assets/person/2.jpeg'
+              src='assets/person/1.jpeg'
               alt=''
               className='rightbarFollowingImg'
             />
             <span className='rightbarFollowingName'>John Carter</span>
-          </div>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/3.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-          </div>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/4.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-          </div>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/5.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-          </div>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/6.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
+            <button className='friend-req accept'>Accept</button>
+            <button className='friend-req remove'>Remove</button>
           </div>
         </div>
       </>
