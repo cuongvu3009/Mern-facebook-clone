@@ -1,11 +1,12 @@
 import './profile.css';
 import Topbar from '../../components/topbar/Topbar';
-import Rightbar from '../../components/rightbar/Rightbar';
 import ProfileFeed from '../../components/feed/ProfileFeed';
 import { useSelector } from 'react-redux';
+import ProfileRightbar from '../../components/rightbar/ProfileRightbar';
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
+
   return (
     <>
       <Topbar />
@@ -32,7 +33,7 @@ export default function Profile() {
 
           <div className='profileRightBottom'>
             <ProfileFeed />
-            <Rightbar profile />
+            <ProfileRightbar />
           </div>
         </div>
       </div>

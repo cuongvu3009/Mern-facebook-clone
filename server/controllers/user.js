@@ -117,12 +117,12 @@ const dislike = async (req, res, next) => {
 
 const getNotFollowingsUsers = async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  const followings = user.followings;
+
   try {
     const users = await User.find({
-      followings: { $nin: followings },
-      email: { $nin: user.email },
+      followings: { $ne: user.followings },
     });
+
     res.status(201).json(users);
   } catch (error) {
     next(error);
@@ -130,14 +130,12 @@ const getNotFollowingsUsers = async (req, res, next) => {
 };
 
 const getFollowingsUsers = async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-  const followings = user.followings;
   try {
-    const users = await User.find({
-      followings: { $in: followings },
-      email: { $nin: user.email },
-    });
-    res.status(201).json(users);
+    const user = await User.findById(req.user.id);
+    const subcribedPeople = user.followings;
+
+    //	add .flat() to remove 1 layer array bracket
+    res.status(200).json(subcribedPeople);
   } catch (error) {
     next(error);
   }
