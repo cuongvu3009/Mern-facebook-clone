@@ -4,23 +4,19 @@ import './feed.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { fetchFailure, fetchStart, fetchSuccess } from '../../redux/postSlice';
 
-export default function Feed() {
+export default function ProfileFeed() {
   const [posts, setPosts] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPosts = async () => {
-      dispatch(fetchStart());
       try {
-        const postRes = await axios.get('/posts');
+        const profileRes = await axios.get(`/posts/myposts`);
 
-        setPosts(postRes.data);
-        dispatch(fetchSuccess(postRes.data));
+        setPosts(profileRes.data);
       } catch (error) {
         console.log(error);
-        dispatch(fetchFailure());
       }
     };
     fetchPosts();
