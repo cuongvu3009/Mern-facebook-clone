@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Comment from '../comment/Comment';
+import { useSelector } from 'react-redux';
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like);
@@ -10,6 +11,9 @@ export default function Post({ post }) {
   const [username, setUsername] = useState('');
   const [userImg, setUserImg] = useState('');
   const [postComments, setPostComments] = useState([]);
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [desc, setDesc] = useState('');
 
   const likeHandler = () => {
     setLike(isLiked ? like - 1 : like + 1);
@@ -27,11 +31,32 @@ export default function Post({ post }) {
 
   useEffect(() => {
     const getComments = async () => {
-      const res = await axios.get(`comments/${post._id}`);
-      setPostComments(res.data);
+      try {
+        const res = await axios.get(`comments/${post._id}`);
+        setPostComments(res?.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     getComments();
   }, [post._id]);
+
+  const handleAddCmt = (e) => {
+    e.preventDefault();
+    try {
+      const createComment = async () => {
+        const res = await axios.post(`comments/`, {
+          userId: currentUser._id,
+          postId: post._id,
+          desc,
+        });
+        console.log(res.data);
+      };
+      createComment();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className='post'>
@@ -79,7 +104,27 @@ export default function Post({ post }) {
             </span>
           </div>
         </div>
-        <Comment postComments={postComments} />
+        <div className='comment-wrapper'>
+          <div className='comment-bar'>
+            <img
+              src={currentUser.profilePicture}
+              alt=''
+              className='postProfileImg'
+            />
+            <input
+              type='text'
+              id='comment-box'
+              placeholder='comment...'
+              onChange={(e) => setDesc(e.target.value)}
+            />
+            <button className='comment-btn' onClick={handleAddCmt}>
+              Send
+            </button>
+          </div>
+          {postComments.map((comment) => (
+            <Comment comment={comment} />
+          ))}
+        </div>
       </div>
     </div>
   );
