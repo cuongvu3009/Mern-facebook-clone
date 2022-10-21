@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import Comment from '../comment/Comment';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.like);
@@ -62,10 +63,12 @@ export default function Post({ post }) {
     <div className='post'>
       <div className='postWrapper'>
         <div className='postTop'>
-          <div className='postTopLeft'>
-            <img className='postProfileImg' src={userImg} alt='' />
-            <span className='postUsername'>{username}</span>
-          </div>
+          <Link to={`/${post.userId}`} className='styledLink'>
+            <div className='postTopLeft'>
+              <img className='postProfileImg' src={userImg} alt='' />
+              <span className='postUsername'>{username}</span>
+            </div>
+          </Link>
           <div className='postTopRight'>
             <span className='postDate'>{Date(post.createdAt)}</span>
           </div>
