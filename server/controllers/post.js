@@ -118,6 +118,15 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
+const getMyPosts = async (req, res, next) => {
+  try {
+    const posts = await Post.find({ userId: req.user.id });
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getByTag,
   getPost,
@@ -127,4 +136,5 @@ module.exports = {
   getSubPosts,
   search,
   getAllPosts,
+  getMyPosts,
 };

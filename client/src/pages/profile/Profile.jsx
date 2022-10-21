@@ -3,6 +3,7 @@ import Topbar from '../../components/topbar/Topbar';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Feed from '../../components/feed/Feed';
 import Rightbar from '../../components/rightbar/Rightbar';
+import Share from '../../components/share/Share';
 
 export default function Profile() {
   return (
@@ -29,6 +30,7 @@ export default function Profile() {
               <span className='profileInfoDesc'>Hello my friends!</span>
             </div>
           </div>
+
           <div className='profileRightBottom'>
             <Feed />
             <Rightbar profile />

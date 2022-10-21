@@ -9,6 +9,7 @@ const {
   getSubPosts,
   search,
   getAllPosts,
+  getMyPosts,
 } = require('../controllers/post');
 const { verifyToken, verifyAdmin } = require('../utils/verifyToken');
 
@@ -35,5 +36,8 @@ router.get('/search', search);
 
 //get by tags
 router.get('/tags', getByTag);
+
+//get my posts
+router.get('/myposts', verifyToken, getMyPosts);
 
 module.exports = router;

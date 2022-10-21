@@ -11,7 +11,7 @@ export default function Feed() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPosts = async ({ type }) => {
       dispatch(fetchStart());
       try {
         const postRes = await axios.get('/posts');
