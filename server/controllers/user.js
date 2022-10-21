@@ -115,6 +115,28 @@ const dislike = async (req, res, next) => {
   }
 };
 
+const getNotFollowingsUsers = async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const followings = user.followings;
+  try {
+    const users = await User.find({ followings: { $nin: followings } });
+    res.status(201).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getFollowingsUsers = async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const followings = user.followings;
+  try {
+    const users = await User.find({ followings: { $in: followings } });
+    res.status(201).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   update,
   deleteUser,
@@ -124,4 +146,6 @@ module.exports = {
   like,
   dislike,
   getAllUsers,
+  getNotFollowingsUsers,
+  getFollowingsUsers,
 };

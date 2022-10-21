@@ -71,7 +71,7 @@ export default function Rightbar({ profile }) {
         <hr />
 
         {/* user friend */}
-        <h4 className='rightbarTitle'>User friends</h4>
+        <h4 className='rightbarTitle'>Followings</h4>
         {loading ? (
           'Loading'
         ) : (
@@ -95,18 +95,26 @@ export default function Rightbar({ profile }) {
 
         {/* Friend accept */}
         <h4 className='rightbarTitle'>Friend requests</h4>
-        <div className='rightbarFollowings'>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/1.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-            <button className='friend-req accept'>Accept</button>
-            <button className='friend-req remove'>Remove</button>
+        {loading ? (
+          'Loading'
+        ) : (
+          <div className='rightbarFollowings'>
+            {users.map((user) => (
+              <Link to={`/${user._id}`} className='styledLink'>
+                <div className='rightbarFollowing' key={user._id}>
+                  <img
+                    src={user.profilePicture}
+                    alt={user.profilePicture}
+                    className='rightbarFollowingImg'
+                  />
+                  <span className='rightbarFollowingName'>{user.username}</span>
+                  <button className='friend-req accept'>Accept</button>
+                  <button className='friend-req remove'>Remove</button>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
+        )}
       </>
     );
   };

@@ -20,7 +20,7 @@ export default function Profile() {
               />
               <img
                 className='profileUserImg'
-                src='assets/person/7.jpeg'
+                src={currentUser.profilePicture}
                 alt=''
               />
             </div>
