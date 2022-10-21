@@ -119,7 +119,10 @@ const getNotFollowingsUsers = async (req, res, next) => {
   const user = await User.findById(req.user.id);
   const followings = user.followings;
   try {
-    const users = await User.find({ followings: { $nin: followings } });
+    const users = await User.find({
+      followings: { $nin: followings },
+      email: { $nin: user.email },
+    });
     res.status(201).json(users);
   } catch (error) {
     next(error);
@@ -130,7 +133,10 @@ const getFollowingsUsers = async (req, res, next) => {
   const user = await User.findById(req.user.id);
   const followings = user.followings;
   try {
-    const users = await User.find({ followings: { $in: followings } });
+    const users = await User.find({
+      followings: { $in: followings },
+      email: { $nin: user.email },
+    });
     res.status(201).json(users);
   } catch (error) {
     next(error);

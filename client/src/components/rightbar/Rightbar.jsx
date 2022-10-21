@@ -29,6 +29,7 @@ export default function Rightbar({ profile }) {
 
   const ProfileRightbar = () => {
     const [users, setUsers] = useState([]);
+    const [friendReq, setFriendReq] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -37,9 +38,9 @@ export default function Rightbar({ profile }) {
         setLoading(true);
 
         try {
-          const res = await axios.get('/users');
-          if (!res) throw new Error('Could not complete sign up');
-          setUsers(res.data);
+          const res = await axios.get('/users/following');
+          if (!res) throw new Error('Could not complete');
+          setUsers(res?.data);
           setLoading(false);
         } catch (error) {
           console.log(error);
@@ -48,6 +49,26 @@ export default function Rightbar({ profile }) {
       };
       fetchFriends();
     }, []);
+
+    useEffect(() => {
+      const fetchFriends = async () => {
+        //	reset state
+        setLoading(true);
+
+        try {
+          const res = await axios.get('/users/notfollowing');
+          if (!res) throw new Error('Could not complete');
+          setFriendReq(res?.data);
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+        }
+      };
+      fetchFriends();
+    }, []);
+
+    const handleAddFriend = () => {};
 
     return (
       <>
@@ -77,16 +98,24 @@ export default function Rightbar({ profile }) {
         ) : (
           <div className='rightbarFollowings'>
             {users.map((user) => (
-              <Link to={`/${user._id}`} className='styledLink'>
-                <div className='rightbarFollowing' key={user._id}>
-                  <img
-                    src={user.profilePicture}
-                    alt={user.profilePicture}
-                    className='rightbarFollowingImg'
-                  />
-                  <span className='rightbarFollowingName'>{user.username}</span>
-                </div>
-              </Link>
+              <>
+                {user ? (
+                  <Link to={`/${user._id}`} className='styledLink'>
+                    <div className='rightbarFollowing' key={user._id}>
+                      <img
+                        src={user.profilePicture}
+                        alt={user.profilePicture}
+                        className='rightbarFollowingImg'
+                      />
+                      <span className='rightbarFollowingName'>
+                        {user.username}
+                      </span>
+                    </div>
+                  </Link>
+                ) : (
+                  <p>You have no friends, let following</p>
+                )}
+              </>
             ))}
           </div>
         )}
@@ -99,7 +128,7 @@ export default function Rightbar({ profile }) {
           'Loading'
         ) : (
           <div className='rightbarFollowings'>
-            {users.map((user) => (
+            {friendReq.map((user) => (
               <Link to={`/${user._id}`} className='styledLink'>
                 <div className='rightbarFollowing' key={user._id}>
                   <img
@@ -108,7 +137,12 @@ export default function Rightbar({ profile }) {
                     className='rightbarFollowingImg'
                   />
                   <span className='rightbarFollowingName'>{user.username}</span>
-                  <button className='friend-req accept'>Accept</button>
+                  <button
+                    className='friend-req accept'
+                    onClick={handleAddFriend}
+                  >
+                    Accept
+                  </button>
                   <button className='friend-req remove'>Remove</button>
                 </div>
               </Link>
