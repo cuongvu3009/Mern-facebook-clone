@@ -9,6 +9,7 @@ export default function Post({ post }) {
   const [isLiked, setIsLiked] = useState(false);
   const [username, setUsername] = useState('');
   const [userImg, setUserImg] = useState('');
+  const [postComments, setPostComments] = useState([]);
 
   const likeHandler = () => {
     setLike(isLiked ? like - 1 : like + 1);
@@ -18,12 +19,19 @@ export default function Post({ post }) {
   useEffect(() => {
     const getUser = async () => {
       const res = await axios.get(`users/find/${post.userId}`);
-
       setUsername(res.data?.username);
       setUserImg(res.data?.profilePicture);
     };
     getUser();
   }, [post.userId]);
+
+  useEffect(() => {
+    const getComments = async () => {
+      const res = await axios.get(`comments/${post._id}`);
+      setPostComments(res.data);
+    };
+    getComments();
+  }, [post._id]);
 
   return (
     <div className='post'>
@@ -66,11 +74,12 @@ export default function Post({ post }) {
             </span>
           </div>
           <div className='postBottomRight'>
-            <span className='postCommentText'>0 comments</span>
+            <span className='postCommentText'>
+              {postComments.length} comments
+            </span>
           </div>
         </div>
-
-        <Comment />
+        <Comment postComments={postComments} />
       </div>
     </div>
   );

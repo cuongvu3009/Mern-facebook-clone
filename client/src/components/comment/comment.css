@@ -25,3 +25,30 @@
   font-weight: bold;
   font-size: 17px;
 }
+
+.user-comment {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-comment {
+  display: flex;
+}
+
+.user-comment-name {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.delete-comment-btn {
+  margin-right: 10px;
+  background-color: inherit;
+  border: none;
+}
