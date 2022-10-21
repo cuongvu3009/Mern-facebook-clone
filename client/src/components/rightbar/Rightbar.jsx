@@ -1,6 +1,10 @@
 import './rightbar.css';
 import { Users } from '../../dummyData';
 import Online from '../online/Online';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Rightbar({ profile }) {
   const HomeRightbar = () => {
@@ -24,6 +28,27 @@ export default function Rightbar({ profile }) {
   };
 
   const ProfileRightbar = () => {
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      const fetchFriends = async () => {
+        //	reset state
+        setLoading(true);
+
+        try {
+          const res = await axios.get('/users');
+          if (!res) throw new Error('Could not complete sign up');
+          setUsers(res.data);
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
+        }
+      };
+      fetchFriends();
+    }, []);
+
     return (
       <>
         {/* user info */}
@@ -47,16 +72,24 @@ export default function Rightbar({ profile }) {
 
         {/* user friend */}
         <h4 className='rightbarTitle'>User friends</h4>
-        <div className='rightbarFollowings'>
-          <div className='rightbarFollowing'>
-            <img
-              src='assets/person/1.jpeg'
-              alt=''
-              className='rightbarFollowingImg'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
+        {loading ? (
+          'Loading'
+        ) : (
+          <div className='rightbarFollowings'>
+            {users.map((user) => (
+              <Link to={`/${user._id}`} className='styledLink'>
+                <div className='rightbarFollowing' key={user._id}>
+                  <img
+                    src={user.profilePicture}
+                    alt={user.profilePicture}
+                    className='rightbarFollowingImg'
+                  />
+                  <span className='rightbarFollowingName'>{user.username}</span>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
+        )}
 
         <hr />
 

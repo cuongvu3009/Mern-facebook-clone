@@ -2,8 +2,10 @@ import './profile.css';
 import Topbar from '../../components/topbar/Topbar';
 import Rightbar from '../../components/rightbar/Rightbar';
 import ProfileFeed from '../../components/feed/ProfileFeed';
+import { useSelector } from 'react-redux';
 
 export default function Profile() {
+  const { currentUser } = useSelector((state) => state.user);
   return (
     <>
       <Topbar />
@@ -23,7 +25,7 @@ export default function Profile() {
               />
             </div>
             <div className='profileInfo'>
-              <h4 className='profileInfoName'>Safak Kocaoglu</h4>
+              <h4 className='profileInfoName'>{currentUser.username}</h4>
               <span className='profileInfoDesc'>Hello my friends!</span>
             </div>
           </div>
