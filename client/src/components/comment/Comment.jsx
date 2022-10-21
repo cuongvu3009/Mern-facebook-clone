@@ -5,13 +5,16 @@ import './comment.css';
 import { AiFillDelete } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 
-const Comment = ({ comment, commentId }) => {
+const Comment = ({ comment }) => {
   const [user, setUser] = useState({});
   const { currentUser } = useSelector((state) => state.user);
 
   const deleteComment = () => {
     try {
       axios.delete(`/comments/${comment._id}`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     } catch (error) {
       console.log(error);
     }
@@ -21,7 +24,7 @@ const Comment = ({ comment, commentId }) => {
     try {
       const getCommentUser = async () => {
         const res = await axios.get(`/users/find/${comment?.userId}`);
-        await setUser(res.data);
+        setUser(res.data);
       };
       getCommentUser();
     } catch (error) {

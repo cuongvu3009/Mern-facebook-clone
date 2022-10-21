@@ -16,6 +16,9 @@ export default function Post({ post }) {
   const likeHandler = async () => {
     try {
       await axios.put(`/users/like/${post._id}`);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +54,11 @@ export default function Post({ post }) {
           desc,
         });
       };
+
       createComment();
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
     } catch (error) {
       console.log(error);
     }
@@ -117,11 +124,7 @@ export default function Post({ post }) {
             </button>
           </div>
           {postComments.map((comment) => (
-            <Comment
-              comment={comment}
-              key={comment._id}
-              commentId={comment._id}
-            />
+            <Comment comment={comment} key={comment._id} />
           ))}
         </div>
       </div>
