@@ -6,8 +6,8 @@ import FriendCard from '../friendCard/FriendCard';
 import UserCard from '../friendCard/UserCard';
 
 const ProfileRightbar = () => {
-  const [users, setUsers] = useState([]);
-  const [friendReq, setFriendReq] = useState([]);
+  const [followings, setFollowings] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const ProfileRightbar = () => {
       try {
         const res = await axios.get('/users/following');
         if (!res) throw new Error('Could not complete');
-        setUsers(res?.data);
+        setFollowings(res?.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -34,9 +34,9 @@ const ProfileRightbar = () => {
       setLoading(true);
 
       try {
-        const res = await axios.get('/users/notfollowing');
+        const res = await axios.get('/users/followers');
         if (!res) throw new Error('Could not complete');
-        setFriendReq(res?.data);
+        setFollowers(res?.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -75,7 +75,7 @@ const ProfileRightbar = () => {
             'Loading'
           ) : (
             <div className='rightbarFollowings'>
-              {users?.map((user) => (
+              {followings?.map((user) => (
                 <>
                   {user ? (
                     <FriendCard user={user} key={user} />
@@ -90,47 +90,36 @@ const ProfileRightbar = () => {
           <hr />
 
           {/* followers */}
-          {/* <h4 className='rightbarTitle'>Followers</h4>
+          <h4 className='rightbarTitle'>Followers</h4>
           {loading ? (
             'Loading'
           ) : (
             <div className='rightbarFollowings'>
-              {users.map((user) => (
+              {followers?.map((user) => (
                 <>
                   {user ? (
-                    <Link to={`/${user._id}`} className='styledLink'>
-                      <div className='rightbarFollowing' key={user._id}>
-                        <img
-                          src={user.profilePicture}
-                          alt={user.profilePicture}
-                          className='rightbarFollowingImg'
-                        />
-                        <span className='rightbarFollowingName'>
-                          {user.username}
-                        </span>
-                      </div>
-                    </Link>
+                    <FriendCard user={user} key={user} />
                   ) : (
                     <p>You have no friends, let following</p>
                   )}
                 </>
               ))}
             </div>
-          )} */}
+          )}
 
           <hr />
 
           {/* Friend accept */}
-          <h4 className='rightbarTitle'>Explore new friends</h4>
+          {/* <h4 className='rightbarTitle'>Explore new friends</h4>
           {loading ? (
             'Loading'
           ) : (
             <div className='rightbarFollowings'>
-              {friendReq.map((user) => (
+              {followers.map((user) => (
                 <UserCard user={user} key={user._id} />
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>

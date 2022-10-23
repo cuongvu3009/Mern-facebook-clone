@@ -9,8 +9,8 @@ const {
   like,
   dislike,
   getAllUsers,
-  getNotFollowingsUsers,
-  getFollowingsUsers,
+  getFollowers,
+  getFollowings,
 } = require('../controllers/user');
 const { verifyToken } = require('../utils/verifyToken');
 
@@ -39,9 +39,9 @@ router.put('/like/:postId', verifyToken, like);
 router.put('/dislike/:postId', verifyToken, dislike);
 
 //get user who are not yet followed
-router.get('/notfollowing', verifyToken, getNotFollowingsUsers);
+router.get('/followers', verifyToken, getFollowers);
 
 //get user who are followed
-router.get('/following', verifyToken, getFollowingsUsers);
+router.get('/following', verifyToken, getFollowings);
 
 module.exports = router;

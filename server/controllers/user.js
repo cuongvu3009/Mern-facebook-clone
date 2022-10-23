@@ -115,36 +115,23 @@ const dislike = async (req, res, next) => {
   }
 };
 
-const getNotFollowingsUsers = async (req, res, next) => {
+const getFollowers = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    const followings = user.followings;
+    const followers = user.followers;
 
-    const users = await User.find().populate('_id');
-
-    const notFollow = await User.aggregate([
-      {
-        $addFields: {
-          exception: {
-            $setDifference: [users, followings],
-          },
-        },
-      },
-    ]);
-
-    res.status(201).json(notFollow);
+    res.status(201).json(followers);
   } catch (error) {
     next(error);
   }
 };
 
-const getFollowingsUsers = async (req, res, next) => {
+const getFollowings = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    const subcribedPeople = user.followings;
+    const followings = user.followings;
 
-    //	add .flat() to remove 1 layer array bracket
-    res.status(200).json(subcribedPeople);
+    res.status(200).json(followings);
   } catch (error) {
     next(error);
   }
@@ -159,6 +146,6 @@ module.exports = {
   like,
   dislike,
   getAllUsers,
-  getNotFollowingsUsers,
-  getFollowingsUsers,
+  getFollowers,
+  getFollowings,
 };
