@@ -116,14 +116,23 @@ const dislike = async (req, res, next) => {
 };
 
 const getNotFollowingsUsers = async (req, res, next) => {
-  const user = await User.findById(req.user.id);
-
   try {
-    const users = await User.find({
-      followings: { $ne: user.followings },
-    });
+    const user = await User.findById(req.user.id);
+    const followings = user.followings;
 
-    res.status(201).json(users);
+    const users = await User.find().populate('_id');
+
+    const notFollow = await User.aggregate([
+      {
+        $addFields: {
+          exception: {
+            $setDifference: [users, followings],
+          },
+        },
+      },
+    ]);
+
+    res.status(201).json(notFollow);
   } catch (error) {
     next(error);
   }

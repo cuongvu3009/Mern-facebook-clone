@@ -8,6 +8,27 @@ import { Link } from 'react-router-dom';
 import FriendCard from '../friendCard/FriendCard';
 
 const HomeRightbar = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      //	reset state
+      setLoading(true);
+
+      try {
+        const res = await axios.get('/users/');
+        if (!res) throw new Error('Could not complete');
+        setUsers(res?.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   return (
     <>
       <div className='rightbar'>
@@ -22,7 +43,7 @@ const HomeRightbar = () => {
           <img className='rightbarAd' src='assets/ad.png' alt='' />
           <h4 className='rightbarTitle'>Online Friends</h4>
           <ul className='rightbarFriendList'>
-            {Users.map((u) => (
+            {users.map((u) => (
               <Online key={u.id} user={u} />
             ))}
           </ul>

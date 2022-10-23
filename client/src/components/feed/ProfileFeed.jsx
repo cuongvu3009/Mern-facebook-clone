@@ -21,6 +21,7 @@ export default function ProfileFeed() {
     };
     fetchPosts();
   }, [dispatch]);
+  console.log(posts);
 
   return (
     <div className='feed'>
