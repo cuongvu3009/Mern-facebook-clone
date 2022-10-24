@@ -97,7 +97,7 @@ export default function Post({ post }) {
               <FcLike size={20} />
             </button>
             <span className='postLikeCounter'>
-              {post.likes.length} people like it
+              {post.likes?.length} people like it
             </span>
           </div>
           <div className='postBottomRight'>
@@ -124,7 +124,7 @@ export default function Post({ post }) {
             </button>
           </div>
           {postComments.map((comment) => (
-            <Comment comment={comment} key={comment._id} />
+            <Comment comment={comment} key={comment._id} postId={post._id} />
           ))}
         </div>
       </div>

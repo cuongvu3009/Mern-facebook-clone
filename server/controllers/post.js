@@ -7,6 +7,9 @@ const addPost = async (req, res, next) => {
 
   try {
     const savedPost = await newPost.save();
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { $push: { posts: savedPost._id } },
+    });
     res.status(200).json(savedPost);
   } catch (err) {
     next(err);

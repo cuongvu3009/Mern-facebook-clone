@@ -52,6 +52,10 @@ const UserSchema = new mongoose.Schema(
       enum: ['single', 'relationship', 'complicated'],
       default: 'single',
     },
+    posts: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );
