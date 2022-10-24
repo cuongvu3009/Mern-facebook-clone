@@ -8,12 +8,26 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
+//	security packages
+const helmet = require('helmet');
+const xss = require('xss-clean');
+
 //	routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const postRoutes = require('./routes/posts');
 const testRoutes = require('./routes/test');
 const commentRoutes = require('./routes/comments');
+
+// Accessing the path module (deploy)
+const path = require('path');
+
+// Step 1 deploy:
+app.use(express.static(path.resolve(__dirname, './client/build')));
+// Step 2 deploy:
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+});
 
 //	db
 const connectDB = async () => {
@@ -28,10 +42,14 @@ mongoose.connection.on('disconnected', () => {
   console.log('mongoDB disconnected!');
 });
 
+//	security
+app.use(helmet());
+app.use(xss());
+
 //	middleware
+app.use(express.json());
 app.use(morgan('tiny'));
 app.use(cookieParser());
-app.use(express.json());
 app.use(cors());
 
 //	routes
