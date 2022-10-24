@@ -29,4 +29,5 @@
 
 .rightbarUsername {
   font-weight: 500;
+  min-width: 120px;
 }

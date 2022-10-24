@@ -41,7 +41,7 @@ const HomeRightbar = () => {
             </span>
           </div>
           <img className='rightbarAd' src='assets/ad.png' alt='' />
-          <h4 className='rightbarTitle'>Online Friends</h4>
+          <h4 className='rightbarTitle'>Friends you can make</h4>
           <ul className='rightbarFriendList'>
             {users.map((u) => (
               <Online key={u.id} user={u} />
