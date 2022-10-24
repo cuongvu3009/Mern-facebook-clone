@@ -4,9 +4,13 @@ import Online from '../online/Online';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const HomeRightbar = () => {
   const [users, setUsers] = useState([]);
+  const [followings, setFollowings] = useState([]);
+  const [notFollowings, setNotFollowings] = useState([]);
+  const { currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,6 +31,36 @@ const HomeRightbar = () => {
     fetchUsers();
   }, []);
 
+  useEffect(() => {
+    const fetchFriends = async () => {
+      //	reset state
+
+      try {
+        const res = await axios.get('/users/following');
+        if (!res) throw new Error('Could not complete');
+        setFollowings(res?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchFriends();
+  }, []);
+
+  useEffect(() => {
+    const getNotFollow = () => {
+      for (let i = 0; i < followings.length; i++) {
+        const notFollow = users.filter(
+          (u) => u._id !== followings[i] && u._id !== currentUser._id
+        );
+
+        setNotFollowings(notFollow);
+      }
+    };
+    getNotFollow();
+  }, [followings, currentUser._id, users]);
+
+  console.log('notfollow', notFollowings);
+
   return (
     <>
       {loading ? (
@@ -44,7 +78,7 @@ const HomeRightbar = () => {
             <img className='rightbarAd' src='assets/ad.png' alt='' />
             <h4 className='rightbarTitle'>Friends you can make</h4>
             <ul className='rightbarFriendList'>
-              {users.map((u) => (
+              {notFollowings.map((u) => (
                 <Online key={u.id} user={u} />
               ))}
             </ul>
