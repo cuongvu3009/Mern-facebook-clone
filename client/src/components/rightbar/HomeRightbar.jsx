@@ -48,8 +48,12 @@ const HomeRightbar = () => {
 
   useEffect(() => {
     const getNotFollow = () => {
+      if (followings.length === 0) {
+        let notFollow = users.filter((u) => u._id !== currentUser._id);
+        setNotFollowings(notFollow);
+      }
       for (let i = 0; i < followings.length; i++) {
-        const notFollow = users.filter(
+        let notFollow = users.filter(
           (u) => u._id !== followings[i] && u._id !== currentUser._id
         );
 
@@ -58,8 +62,6 @@ const HomeRightbar = () => {
     };
     getNotFollow();
   }, [followings, currentUser._id, users]);
-
-  console.log('notfollow', notFollowings);
 
   return (
     <>
