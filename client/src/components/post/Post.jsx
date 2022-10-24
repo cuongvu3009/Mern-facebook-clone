@@ -5,6 +5,7 @@ import axios from 'axios';
 import Comment from '../comment/Comment';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { FcLike } from 'react-icons/fc';
 
 export default function Post({ post }) {
   const [username, setUsername] = useState('');
@@ -92,12 +93,9 @@ export default function Post({ post }) {
         </div>
         <div className='postBottom'>
           <div className='postBottomLeft'>
-            <img
-              className='likeIcon'
-              src='assets/like.png'
-              onClick={likeHandler}
-              alt=''
-            />
+            <button onClick={likeHandler}>
+              <FcLike size={20} />
+            </button>
             <span className='postLikeCounter'>
               {post.likes.length} people like it
             </span>

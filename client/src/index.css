@@ -27,4 +27,8 @@ code {
 
 button {
   cursor: pointer;
+  background-color: inherit;
+  color: inherit;
+  border: none;
+  padding: 5px;
 }
