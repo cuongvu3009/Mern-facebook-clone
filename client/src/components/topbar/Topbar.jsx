@@ -21,7 +21,7 @@ export default function Topbar() {
         <div className='searchbar'>
           <FaSearch className='searchIcon' />
           <input
-            placeholder='Search for friend, post or video'
+            placeholder='Search for post or tags'
             className='searchInput'
           />
         </div>
