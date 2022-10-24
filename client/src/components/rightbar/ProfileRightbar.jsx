@@ -1,9 +1,7 @@
 import './rightbar.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import FriendCard from '../friendCard/FriendCard';
-import UserCard from '../friendCard/UserCard';
 
 const ProfileRightbar = () => {
   const [followings, setFollowings] = useState([]);
@@ -106,20 +104,6 @@ const ProfileRightbar = () => {
               ))}
             </div>
           )}
-
-          <hr />
-
-          {/* Friend accept */}
-          {/* <h4 className='rightbarTitle'>Explore new friends</h4>
-          {loading ? (
-            'Loading'
-          ) : (
-            <div className='rightbarFollowings'>
-              {followers.map((user) => (
-                <UserCard user={user} key={user._id} />
-              ))}
-            </div>
-          )} */}
         </div>
       </div>
     </>

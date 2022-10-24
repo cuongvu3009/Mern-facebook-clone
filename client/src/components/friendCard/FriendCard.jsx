@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -16,10 +15,7 @@ const FriendCard = ({ user }) => {
     fetchFriend();
   }, [user]);
 
-  console.log(friend);
-
   return (
-    // <Link to={`/${user._id}`} className='styledLink'>
     <div className='rightbarFollowing' key={friend._id}>
       <img
         src={friend.profilePicture}
@@ -28,7 +24,6 @@ const FriendCard = ({ user }) => {
       />
       <span className='rightbarFollowingName'>{friend.username}</span>
     </div>
-    // </Link>
   );
 };
 
